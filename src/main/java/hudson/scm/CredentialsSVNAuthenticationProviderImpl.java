@@ -293,8 +293,7 @@ public class CredentialsSVNAuthenticationProviderImpl implements ISVNAuthenticat
                 return new SVNCertificateAuthenticationBuilder((CertificateCredentials) c);
             }
             if (c instanceof SSHUserPrivateKey) {
-                return new SVNUsernamePrivateKeysAuthenticationBuilder(
-                        (SSHUserPrivateKey) c);
+                return new SVNUsernamePrivateKeysAuthenticationBuilder((SSHUserPrivateKey) c);
             }
             if (c instanceof UsernamePasswordCredentials) {
                 return new SVNUsernamePasswordAuthenticationBuilder((UsernamePasswordCredentials) c);

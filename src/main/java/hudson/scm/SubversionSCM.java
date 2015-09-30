@@ -873,18 +873,21 @@ public class SubversionSCM extends SCM implements Serializable {
      *      if the operation failed. Otherwise the set of local workspace paths
      *      (relative to the workspace root) that has loaded due to svn:external.
      */
+    @CheckForNull
     private List<External> checkout(Run build, FilePath workspace, TaskListener listener, EnvVars env) throws IOException, InterruptedException {
         if (repositoryLocationsNoLongerExist(build, listener, env)) {
             Run lsb = build.getParent().getLastSuccessfulBuild();
-            if (build instanceof AbstractBuild && lsb != null && build.getNumber()-lsb.getNumber()>10
-            && build.getTimestamp().getTimeInMillis()-lsb.getTimestamp().getTimeInMillis() > TimeUnit2.DAYS.toMillis(1)) {
+            if (build instanceof AbstractBuild && lsb != null && build.getNumber() - lsb.getNumber() > 10 && build
+                    .getTimestamp().getTimeInMillis() - lsb.getTimestamp().getTimeInMillis() > TimeUnit2.DAYS
+                    .toMillis(1)) {
                 // Disable this project if the location doesn't exist any more, see issue #763
                 // but only do so if there was at least some successful build,
                 // to make sure that initial configuration error won't disable the build. see issue #1567
                 // finally, only disable a build if the failure persists for some time.
                 // see http://www.nabble.com/Should-Hudson-have-an-option-for-a-content-fingerprint--td24022683.html
 
-                listener.getLogger().println("One or more repository locations do not exist anymore for " + build.getParent().getName() + ", project will be disabled.");
+                listener.getLogger().format("One or more repository locations do not exist anymore for %s project " +
+                        "will be disabled%n", build.getParent().getName());
                 disableProject(((AbstractBuild) build).getProject(), listener);
                 return null;
             }
@@ -2477,7 +2480,7 @@ public class SubversionSCM extends SCM implements Serializable {
                 return FormValidation.ok();
 
             // Test the connection only if we have admin permission
-            if (!Hudson.getInstance().hasPermission(Hudson.ADMINISTER))
+            if (!Jenkins.getInstance().hasPermission(Hudson.ADMINISTER))
                 return FormValidation.ok();
 
             try {

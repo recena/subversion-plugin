@@ -28,6 +28,7 @@ import hudson.ExtensionPoint;
 import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.scm.SubversionSCM.DescriptorImpl.Credential;
+import jenkins.model.Jenkins;
 import org.tmatesoft.svn.core.SVNURL;
 
 /**
@@ -56,9 +57,9 @@ public abstract class SubversionCredentialProvider implements ExtensionPoint {
     public abstract Credential getCredential(SVNURL url, String realm);
 
     /**
-     * All regsitered instances.
+     * All registered instances.
      */
     public static ExtensionList<SubversionCredentialProvider> all() {
-        return Hudson.getInstance().getExtensionList(SubversionCredentialProvider.class);
+        return Jenkins.getInstance().getExtensionList(SubversionCredentialProvider.class);
     }
 }
